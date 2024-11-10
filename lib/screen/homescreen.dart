@@ -94,31 +94,80 @@ class HomeScreen extends StatelessWidget {
                         ),
                 );
               }),
-              SizedBox(
-                height: 10.h,
+              Obx(
+                () => homecontroller.iscalendar.value
+                    ? SizedBox(
+                        height: 15.h,
+                      )
+                    : Container(),
               ),
-              InkWell(
-                onTap: () {
-                  homecontroller.iscalendar.value =
-                      !homecontroller.iscalendar.value;
-                },
-                borderRadius: BorderRadius.circular(12.r),
-                child: Container(
-                  height: 20.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Obx(
-                        () => Image.asset(
-                          "./assets/Icons/${homecontroller.iscalendar.value ? "up-arrows.png" : "down-arrow.png"}",
-                        ),
+              Obx(
+                () => homecontroller.iscalendar.value
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 10.w,
+                            width: 10.w,
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Text(
+                            "Normal days",
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Container(
+                            height: 10.w,
+                            width: 10.w,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const Color.fromARGB(217, 30, 128, 209),
+                              ),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          Text(
+                            "Menstruation days",
+                          ),
+                        ],
+                      )
+                    : Container(),
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              Container(
+                height: 20.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                      () => Image.asset(
+                        "./assets/Icons/${homecontroller.iscalendar.value ? "up-arrows.png" : "down-arrow.png"}",
                       ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      Text("Show calendar")
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    InkWell(
+                        onTap: () {
+                          homecontroller.iscalendar.value =
+                              !homecontroller.iscalendar.value;
+                        },
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: Text("Show calendar"))
+                  ],
                 ),
               ),
               SizedBox(
