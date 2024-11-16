@@ -86,8 +86,14 @@ class HomeScreen extends StatelessWidget {
               GetBuilder<Homecontroller>(builder: (controller) {
                 return Obx(
                   () => controller.iscalendar.value
-                      ? Fullcalendar(
-                          homecontroller: Homecontroller(),
+                      ? Obx(
+                          () => controller.iscyclegets.value
+                              ? Fullcalendar(
+                                  homecontroller: controller,
+                                )
+                              : Fullcalendar(
+                                  homecontroller: controller,
+                                ),
                         )
                       : LinerCalendar(
                           homecontroller: homecontroller,
@@ -174,7 +180,6 @@ class HomeScreen extends StatelessWidget {
                 height: 24.h,
               ),
               Container(
-                height: 80.h,
                 width: 361.w,
                 padding: EdgeInsets.all(16.w),
                 alignment: Alignment.center,
@@ -192,12 +197,14 @@ class HomeScreen extends StatelessWidget {
                         fontSize: 16.sp,
                       ),
                     ),
-                    Text(
-                      "July 29",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
+                    Obx(
+                      () => Text(
+                        homecontroller.cycleinfo.value,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     // July 29
@@ -220,10 +227,12 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 16.h,
               ),
-              Menus(
-                "clock",
-                title: "Started June 27",
-                subtitle: "18 days ago",
+              Obx(
+                () => Menus(
+                  "clock",
+                  title: "Started ${homecontroller.cycleinfo.value}",
+                  subtitle: homecontroller.cyclecnt.value,
+                ),
               ),
               SizedBox(
                 height: 8.h,
@@ -243,6 +252,88 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(
+                  vertical: 10.h,
+                  horizontal: 16.w,
+                ),
+                child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Notes of day",
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    Container(
+                      height: 250.h,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5.h,
+                        horizontal: 16.w,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: TextField(
+                        expands: true,
+                        maxLines: null,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 250.w,
+                          height: 55.h,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 25.w,
+                            vertical: 5.h,
+                          ),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            color: Color.fromARGB(255, 255, 216, 223),
+                            border: Border.all(),
+                          ),
+                          child: Text(
+                            "Upload",
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+        child: Icon(
+          Icons.add,
         ),
       ),
     );

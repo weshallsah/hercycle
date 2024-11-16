@@ -16,7 +16,9 @@ class NavScreen extends StatelessWidget {
       body: GetBuilder<Navcontroller>(
         builder: (controller) {
           return Obx(
-            () => controller.navscreen.value[controller.idx.value],
+            () {
+              return controller.navscreen.value[controller.idx.value];
+            },
           );
         },
       ),
