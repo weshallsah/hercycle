@@ -3,7 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Note extends StatelessWidget {
   int idx;
-  Note(this.idx, {super.key});
+  String quotes;
+  String date;
+  String time;
+  Note(this.idx,
+      {required this.date,
+      required this.time,
+      required this.quotes,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +67,18 @@ class Note extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "17 Sep 2023",
+                        date,
                         style: TextStyle(
                           fontSize: 16.sp,
+                          color: Colors.black.withOpacity(0.6),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "11:21 AM",
+                        time,
                         style: TextStyle(
                           fontSize: 12.sp,
+                          color: Colors.black.withOpacity(0.6),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -96,10 +105,10 @@ class Note extends StatelessWidget {
                   ),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "If any note the it will appear here.",
+                    quotes,
                     style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.black.withOpacity(0.6),
+                      fontSize: 16.sp,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -268,6 +268,9 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     Text(
                       "Notes of day",
                       style: TextStyle(
@@ -279,7 +282,7 @@ class HomeScreen extends StatelessWidget {
                       height: 16.h,
                     ),
                     Container(
-                      height: 250.h,
+                      height: 130.h,
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(
                         vertical: 5.h,
@@ -292,6 +295,38 @@ class HomeScreen extends StatelessWidget {
                       child: TextField(
                         expands: true,
                         maxLines: null,
+                        controller: homecontroller.note,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 15.w,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Creating At",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "${DateFormat('d MMM y').format(homecontroller.dateTime.value)} ${DateFormat.jm().format(homecontroller.dateTime.value)}",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -301,6 +336,8 @@ class HomeScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       child: InkWell(
                         onTap: () {
+                          print(homecontroller.uid);
+                          homecontroller.uploadnote();
                           Navigator.pop(context);
                         },
                         child: Container(

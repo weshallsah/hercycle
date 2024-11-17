@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hercycle/component/Notes.dart';
 import 'package:hercycle/controller/profile.controller.dart';
+import 'package:intl/intl.dart';
 
 class Profilescreen extends StatelessWidget {
   Profilescreen({super.key});
@@ -44,23 +46,24 @@ class Profilescreen extends StatelessWidget {
               () => Container(
                 alignment: Alignment.center,
                 child: Container(
-                  height: 100.w,
-                  width: 100.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.r),
-                    border: Border.all(),
-                    image: DecorationImage(
-                      image: profilecontroller.Imageurl.value.isEmpty
-                          ? AssetImage(
-                              "./assets/png/profileavatar.png",
-                            )
-                          : NetworkImage(
-                              profilecontroller.Imageurl.value,
-                            ),
-                      fit: BoxFit.fill,
+                    height: 100.w,
+                    width: 100.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.r),
+                      border: Border.all(),
                     ),
-                  ),
-                ),
+                    child: InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(100.r),
+                      child: CircleAvatar(
+                        foregroundImage: NetworkImage(
+                          profilecontroller.Imageurl.value,
+                        ),
+                        backgroundImage: AssetImage(
+                          "./assets/png/profileavatar.png",
+                        ),
+                      ),
+                    )),
               ),
             ),
             SizedBox(
@@ -143,18 +146,37 @@ class Profilescreen extends StatelessWidget {
               height: 15.h,
             ),
             Text(
-              "Previous Month",
+              "Previous Month Notes",
             ),
             SizedBox(
               height: 12.h,
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return Note(index + 1);
-              },
+            Expanded(
+              child: GetBuilder<Profilecontroller>(initState: (state) {
+                profilecontroller.getnotes();
+              }, builder: (controller) {
+                return Obx(
+                  () => SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: profilecontroller.notes.length,
+                          itemBuilder: (context, index) {
+                            return Note(
+                              index + 1,
+                              date: profilecontroller.notes[index]['date'],
+                              time: profilecontroller.notes[index]['time'],
+                              quotes: profilecontroller.notes[index]['notes'],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
           ],
         ),

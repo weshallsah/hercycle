@@ -37,6 +37,8 @@ class Authcontroller extends GetxController {
     try {
       final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text, password: password.text);
+      email.clear();
+      password.clear();
       Splashcontroller().onInit();
     } catch (e) {
       print("Error := ${e}");
@@ -83,9 +85,13 @@ class Authcontroller extends GetxController {
               "email": email.text,
               "name": name.text,
               "cycledate": int.parse(date.text),
-              "avatar": url
+              "avatar": url,
+              "createdat": Timestamp.now(),
             });
-            print("user is created");
+            email.clear();
+            password.clear();
+            name.clear();
+            date.clear();
             Splashcontroller().onInit();
           } catch (e) {
             print("Error := ${e}");

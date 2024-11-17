@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -15,10 +16,12 @@ class Homecontroller extends GetxController {
   RxInt cycleen = 0.obs;
   RxString cycleinfo = "".obs;
   RxString cyclecnt = "".obs;
+  TextEditingController note = TextEditingController();
   @override
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
+    uid = FirebaseAuth.instance.currentUser?.uid;
     dateTime.value = DateTime.now();
     int len = DateTime.now().weekday % 7;
     for (int i = 1; i < 7 - len; i++) {
@@ -28,20 +31,20 @@ class Homecontroller extends GetxController {
       days.add(DateTime.now().day - i);
     }
     days.sort();
-    final uid = FirebaseAuth.instance.currentUser?.uid;
     final userdata =
         await FirebaseFirestore.instance.collection("user").doc(uid).get();
     // print("user := ${userdata.data()}");
     int curmonth = daysInMonth(dateTime.value, dateTime.value.month) + 1;
-    int prevmonth = daysInMonth(dateTime.value, dateTime.value.month - 1) + 1;
+    int prevmonth = daysInMonth(dateTime.value, dateTime.value.month - 1);
     int mid = userdata.data()?['cycledate'];
+    // int mid = 1;
     prides.value[mid] = true;
     for (int i = 1; i <= 3; i++) {
       prides.value[(mid + i) % curmonth] = true;
       cycleen.value = (mid + i) % curmonth;
       if (mid - i <= 0) {
-        prides.value[prevmonth - mid - i] = true;
-        cyclest.value = prevmonth - mid - i;
+        prides.value[prevmonth + (mid - i)] = true;
+        cyclest.value = prevmonth + (mid - i);
       } else {
         prides.value[(mid - i)] = true;
         cyclest.value = mid - i;
@@ -67,5 +70,24 @@ class Homecontroller extends GetxController {
     var firstDayNextMonth = new DateTime(firstDayThisMonth.year,
         firstDayThisMonth.month + 1, firstDayThisMonth.day);
     return firstDayNextMonth.difference(firstDayThisMonth).inDays;
+  }
+
+  void uploadnote() async {
+    if (note.text.isEmpty) {
+      return;
+    }
+    print(note.text);
+    FirebaseFirestore.instance
+        .collection("notes")
+        .doc(uid)
+        .collection("quotes")
+        .doc()
+        .set({
+      "notes": note.text,
+      "date": "${DateFormat('d MMM y').format(dateTime.value)}",
+      "time": "${DateFormat.jm().format(dateTime.value)}",
+      "createdat": Timestamp.now(),
+    });
+    note.clear();
   }
 }

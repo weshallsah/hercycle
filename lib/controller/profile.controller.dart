@@ -12,11 +12,14 @@ class Profilecontroller extends GetxController {
   RxString name = "siddhi sah".obs;
   RxString Imageurl = "".obs;
   RxString avatar = "".obs;
+  late final uid;
+  RxList notes = [].obs;
   @override
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
     final user = await FirebaseAuth.instance.currentUser;
+    uid = user?.uid;
     final userdata = await FirebaseFirestore.instance
         .collection("user")
         .doc(user?.uid)
@@ -25,6 +28,25 @@ class Profilecontroller extends GetxController {
     name.value = userdata.data()?['name'];
     Imageurl.value = userdata.data()?['avatar'];
     username.text = name.value;
+    getnotes();
+  }
+
+  void getnotes() async {
+    final data = await FirebaseFirestore.instance
+        .collection("notes")
+        .doc(uid)
+        .collection("quotes")
+        .orderBy("createdat", descending: true)
+        .get();
+    if (notes.length < data.docs.length) {
+      notes.value = [];
+    } else {
+      return;
+    }
+    for (var d in data.docs) {
+      notes.add(d.data());
+    }
+    print(notes);
   }
 
   void singout() async {
