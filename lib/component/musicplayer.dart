@@ -15,7 +15,7 @@ class Musicplayer extends StatelessWidget {
       height: 110.h,
       width: 358.w,
       decoration: BoxDecoration(
-        border: Border.all(),
+        border: Border.all(color: Color.fromARGB(255, 224, 232, 242)),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
@@ -62,12 +62,12 @@ class Musicplayer extends StatelessWidget {
                     children: [
                       Obx(
                         () => Text(
-                          "${workoutcontroller.pos.value.inHours}:${workoutcontroller.pos.value.inMinutes}:${workoutcontroller.pos.value.inSeconds}",
+                          "${workoutcontroller.pos.value.inHours}:${workoutcontroller.pos.value.inMinutes}:${workoutcontroller.pos.value.inSeconds % 60}",
                         ),
                       ),
                       Obx(
                         () => Text(
-                          "${workoutcontroller.duration.value.inHours}:${workoutcontroller.duration.value.inMinutes}:${workoutcontroller.duration.value.inSeconds}",
+                          "${workoutcontroller.duration.value.inHours}:${workoutcontroller.duration.value.inMinutes}:${workoutcontroller.duration.value.inSeconds % 60}",
                         ),
                       ),
                     ],

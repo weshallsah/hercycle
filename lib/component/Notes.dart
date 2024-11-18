@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hercycle/controller/profile.controller.dart';
 
 class Note extends StatelessWidget {
   int idx;
   String quotes;
   String date;
   String time;
+  Profilecontroller profilecontroller;
   Note(this.idx,
       {required this.date,
       required this.time,
       required this.quotes,
+      required this.profilecontroller,
       super.key});
 
   @override
@@ -45,7 +48,7 @@ class Note extends StatelessWidget {
                 0.4,
               ),
               child: Text(
-                "${idx}",
+                "${idx + 1}",
                 style: TextStyle(
                   fontSize: 16.sp,
                   color: Colors.redAccent,
@@ -85,33 +88,50 @@ class Note extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.only(
-                    right: 10.w,
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Note:",
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.black.withOpacity(0.6),
-                      fontWeight: FontWeight.bold,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(
+                            right: 10.w,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Note:",
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.black.withOpacity(0.6),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 220.w,
+                          padding: EdgeInsets.only(
+                            right: 10.w,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            quotes,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(
-                    right: 10.w,
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    quotes,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                    IconButton(
+                      onPressed: () {
+                        profilecontroller.deletenote(idx);
+                      },
+                      icon: Icon(Icons.delete),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),

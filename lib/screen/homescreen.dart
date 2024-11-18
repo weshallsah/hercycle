@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hercycle/component/fullcalendar.dart';
@@ -46,13 +47,15 @@ class HomeScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(0),
                 alignment: Alignment.topLeft,
-                child: Text(
-                  "Cyra Dawn",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.redAccent,
+                child: Obx(
+                  () => Text(
+                    homecontroller.name.value,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.redAccent,
+                    ),
                   ),
                 ),
               ),
@@ -83,7 +86,9 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 15.h,
               ),
-              GetBuilder<Homecontroller>(builder: (controller) {
+              GetBuilder<Homecontroller>(initState: (state) {
+                homecontroller.getname();
+              }, builder: (controller) {
                 return Obx(
                   () => controller.iscalendar.value
                       ? Obx(
@@ -295,6 +300,8 @@ class HomeScreen extends StatelessWidget {
                       child: TextField(
                         expands: true,
                         maxLines: null,
+                        autocorrect: true,
+                        keyboardType: TextInputType.text,
                         controller: homecontroller.note,
                         style: TextStyle(
                           fontSize: 18.sp,

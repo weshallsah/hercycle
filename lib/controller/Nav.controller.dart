@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hercycle/controller/profile.controller.dart';
-import 'package:hercycle/screen/Settingscreen.dart';
+import 'package:hercycle/screen/Vlogs.dart';
 import 'package:hercycle/screen/workout.dart';
 import 'package:hercycle/screen/homescreen.dart';
 import 'package:hercycle/screen/profilescreen.dart';
@@ -11,7 +11,7 @@ class Navcontroller extends GetxController {
   RxList navscreen = [
     HomeScreen(),
     WorkoutScreen(),
-    Settingscreen(),
+    Vlogscreen(),
     Profilescreen(),
   ].obs;
 }

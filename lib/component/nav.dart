@@ -25,6 +25,11 @@ class NavScreen extends StatelessWidget {
       bottomNavigationBar: Container(
         height: 60.h,
         margin: EdgeInsets.only(bottom: 2.h),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Color.fromARGB(255, 224, 232, 242)),
+          ),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

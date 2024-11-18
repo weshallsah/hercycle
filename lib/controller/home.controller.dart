@@ -9,11 +9,12 @@ class Homecontroller extends GetxController {
   RxList weekdays = ["S", "M", "T", "W", "T", "F", "S"].obs;
   RxBool iscalendar = false.obs;
   RxList days = [].obs;
-  late final uid;
+  final uid = FirebaseAuth.instance.currentUser?.uid;
   RxMap prides = {}.obs;
   RxBool iscyclegets = false.obs;
   RxInt cyclest = 0.obs;
   RxInt cycleen = 0.obs;
+  RxString name = "".obs;
   RxString cycleinfo = "".obs;
   RxString cyclecnt = "".obs;
   TextEditingController note = TextEditingController();
@@ -21,7 +22,7 @@ class Homecontroller extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
-    uid = FirebaseAuth.instance.currentUser?.uid;
+    // uid =
     dateTime.value = DateTime.now();
     int len = DateTime.now().weekday % 7;
     for (int i = 1; i < 7 - len; i++) {
@@ -63,6 +64,12 @@ class Homecontroller extends GetxController {
       int cnt = cyclest.value - dateTime.value.day;
       cyclecnt.value = "${cnt} days ago";
     }
+  }
+
+  void getname() async {
+    final userdata =
+        await FirebaseFirestore.instance.collection("user").doc(uid).get();
+    name.value = userdata.data()?['name'];
   }
 
   int daysInMonth(DateTime date, int month) {

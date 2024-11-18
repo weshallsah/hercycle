@@ -7,6 +7,7 @@ class Workoutcontroller extends GetxController {
   Rx<Duration> pos = Duration.zero.obs;
   Rx<Duration> duration = Duration.zero.obs;
   Rx<DateTime> dateTime = DateTime.now().obs;
+  RxBool isgym = false.obs;
   int cnt = 0;
   @override
   void onInit() {

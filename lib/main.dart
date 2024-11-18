@@ -29,10 +29,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: ScreenUtilInit(
+      home: const ScreenUtilInit(
         designSize: Size(393, 852),
         child: Scaffold(
           body: Center(
