@@ -14,6 +14,9 @@ class Posts extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 25.r,
+                foregroundImage: AssetImage(
+                  "./assets/png/profileavatar.png",
+                ),
               ),
               SizedBox(
                 width: 15.w,

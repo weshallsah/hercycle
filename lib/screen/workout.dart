@@ -144,7 +144,7 @@ class WorkoutScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 126,
+        height: 95,
         alignment: Alignment.topCenter,
         child: Musicplayer(
           workoutcontroller: workoutcontroller,

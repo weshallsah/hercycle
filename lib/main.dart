@@ -32,6 +32,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        sliderTheme: SliderTheme.of(context).copyWith(
+          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 1.0),
+          trackHeight: 4,
+        ),
       ),
       home: const ScreenUtilInit(
         designSize: Size(393, 852),
