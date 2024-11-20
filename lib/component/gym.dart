@@ -20,9 +20,10 @@ class GymScreen extends StatelessWidget {
         return Obx(
           () => ListView.builder(
             itemCount: controller.workout.length,
+            physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               print(controller.workout[index]['url']);
-              return Column(
+              return Column( 
                 children: [
                   new Container(
                       margin: EdgeInsets.symmetric(vertical: 10.h),

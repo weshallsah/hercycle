@@ -66,12 +66,26 @@ class Vlogscreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return index % 2 == 0 ? Posts() : Tweets();
-                },
-              ),
+              child: GetBuilder<VlogsController>(initState: (state) {
+                vlogsController.getposts();
+              }, builder: (controller) {
+                return Obx(
+                  () => ListView.builder(
+                    itemCount: controller.posts.length,
+                    itemBuilder: (context, index) {
+                      return controller.posts[index]['istweet']
+                          ? Tweets(
+                              controller: controller,
+                              idx: index,
+                            )
+                          : Posts(
+                              controller: controller,
+                              idx: index,
+                            );
+                    },
+                  ),
+                );
+              }),
             ),
           ],
         ),

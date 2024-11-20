@@ -14,7 +14,14 @@ class Emailvirfy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.offAll(() => AuthScreen());
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,33 +74,6 @@ class Emailvirfy extends StatelessWidget {
                 SizedBox(
                   height: 10.h,
                 ),
-                // Obx(
-                //   () => authcontroller.isverifyclicked.value
-                //       ? Container(
-                //           margin: EdgeInsets.symmetric(
-                //             horizontal: 25.w,
-                //           ),
-                //           alignment: Alignment.centerLeft,
-                //           child: Row(
-                //             children: [
-                //               Text(
-                //                 "If you verified by mail link please ",
-                //                 style: TextStyle(
-                //                   fontSize: 16.sp,
-                //                   fontWeight: FontWeight.w600,
-                //                 ),
-                //               ),
-                //               InkWell(
-                //                 onTap: () {},
-                //                 child: Text(
-                //                   "click here!",
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         )
-                //       : Container(),
-                // ),
               ],
             ),
             Column(
@@ -101,14 +81,21 @@ class Emailvirfy extends StatelessWidget {
                 Obx(
                   () => Loginbutton(
                     clicked: () async {
-                      await FirebaseAuth.instance.currentUser
-                          ?.sendEmailVerification();
-                      authcontroller.isverifyclicked.value = true;
-                      Splashcontroller().checkverfication();
+                      try {
+                        authcontroller.isloading.value = true;
+                        await FirebaseAuth.instance.currentUser
+                            ?.sendEmailVerification();
+                        authcontroller.isverifyclicked.value = true;
+                        authcontroller.isloading.value = false;
+                        Splashcontroller().checkverfication();
+                      } catch (e) {
+                        print(e);
+                      }
                     },
                     name: authcontroller.isverifyclicked.value
                         ? "Resend"
                         : "Verify",
+                    authcontroller: authcontroller,
                   ),
                 ),
                 SizedBox(

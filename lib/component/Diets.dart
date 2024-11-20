@@ -28,10 +28,21 @@ class DietsScreen extends StatelessWidget {
                       return Column(
                         children: [
                           Container(
+                            height: 300.h,
                             // color: Colors.blue,
                             margin: EdgeInsets.symmetric(vertical: 10.h),
                             child: Image.network(
-                              controller.diets[index]['url'] ?? "",
+                              controller.diets[index]['url'],
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  height: 350.h,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.photo,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           Container(
@@ -60,7 +71,8 @@ class DietsScreen extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    controller.diets[index]['description'] ?? "",
+                                    controller.diets[index]['description'] ??
+                                        "",
                                     textAlign: TextAlign.justify,
                                     style: TextStyle(
                                       fontSize: 14.sp,

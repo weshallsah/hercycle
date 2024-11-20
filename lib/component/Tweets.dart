@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:hercycle/controller/Vlogs.controller.dart';
 
 class Tweets extends StatelessWidget {
-  const Tweets({super.key});
+  int idx;
+  VlogsController controller;
+  Tweets({required this.idx, required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +17,7 @@ class Tweets extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                radius: 25.r,
+                radius: 20.r,
                 foregroundImage: AssetImage(
                   "./assets/png/profileavatar.png",
                 ),
@@ -21,11 +25,13 @@ class Tweets extends StatelessWidget {
               SizedBox(
                 width: 15.w,
               ),
-              Text(
-                "Username",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
+              Obx(
+                () => Text(
+                  controller.posts[idx]["username"],
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
@@ -33,19 +39,20 @@ class Tweets extends StatelessWidget {
           SizedBox(
             height: 15.h,
           ),
-          Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: 5.w,
-            ),
-            alignment: Alignment.centerLeft,
-            child: RichText(
-              text: TextSpan(
-                text:
-                    'Diet that you can have in your periods.Diet that you can have in your periods.Diet that you can have in your periods.',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.normal,
+          Obx(
+            () => Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 5.w,
+              ),
+              alignment: Alignment.centerLeft,
+              child: RichText(
+                text: TextSpan(
+                  text: controller.posts[idx]["caption"],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
             ),

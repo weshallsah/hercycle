@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hercycle/component/Loginbutton.dart';
+import 'package:hercycle/component/forget.dart';
 import 'package:hercycle/component/inputbox.dart';
 import 'package:hercycle/controller/auth.controller.dart';
 
@@ -124,7 +125,9 @@ class AuthScreen extends StatelessWidget {
                         ),
                         alignment: Alignment.centerRight,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(() => Forgetscreen());
+                          },
                           borderRadius: BorderRadius.circular(
                             12.r,
                           ),
@@ -148,10 +151,11 @@ class AuthScreen extends StatelessWidget {
                 () => Loginbutton(
                   clicked: () {
                     authcontroller.isLogin.value
-                        ? authcontroller.Login()
-                        : authcontroller.signup();
+                        ? authcontroller.Login(context)
+                        : authcontroller.signup(context);
                   },
                   name: authcontroller.isLogin.value ? "Login" : "Signup",
+                  authcontroller: authcontroller,
                 ),
               ),
               SizedBox(

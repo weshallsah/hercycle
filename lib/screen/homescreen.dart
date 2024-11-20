@@ -6,6 +6,7 @@ import 'package:hercycle/component/fullcalendar.dart';
 import 'package:hercycle/component/linercalendar.dart';
 import 'package:hercycle/component/menus.dart';
 import 'package:hercycle/controller/home.controller.dart';
+import 'package:hercycle/services/notification.services.dart';
 import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -14,7 +15,6 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final Homecontroller homecontroller = Get.put(Homecontroller());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,23 +87,27 @@ class HomeScreen extends StatelessWidget {
                 height: 15.h,
               ),
               GetBuilder<Homecontroller>(initState: (state) {
-                homecontroller.getname();
+                homecontroller.getname(context);
               }, builder: (controller) {
-                return Obx(
-                  () => controller.iscalendar.value
-                      ? Obx(
-                          () => controller.iscyclegets.value
-                              ? Fullcalendar(
-                                  homecontroller: controller,
-                                )
-                              : Fullcalendar(
-                                  homecontroller: controller,
-                                ),
-                        )
-                      : LinerCalendar(
-                          homecontroller: homecontroller,
-                        ),
-                );
+                return Obx(() => controller.iscalendar.value
+                    ? Obx(
+                        () => controller.iscyclegets.value
+                            ? Fullcalendar(
+                                homecontroller: controller,
+                              )
+                            : Fullcalendar(
+                                homecontroller: controller,
+                              ),
+                      )
+                    : Obx(
+                        () => controller.iscyclegets.value
+                            ? LinerCalendar(
+                                homecontroller: homecontroller,
+                              )
+                            : LinerCalendar(
+                                homecontroller: homecontroller,
+                              ),
+                      ));
               }),
               Obx(
                 () => homecontroller.iscalendar.value
@@ -344,7 +348,7 @@ class HomeScreen extends StatelessWidget {
                       child: InkWell(
                         onTap: () {
                           print(homecontroller.uid);
-                          homecontroller.uploadnote();
+                          homecontroller.uploadnote(context);
                           Navigator.pop(context);
                         },
                         child: Container(
@@ -376,8 +380,9 @@ class HomeScreen extends StatelessWidget {
             },
           );
         },
-        child: Icon(
-          Icons.add,
+        child: Container(
+          width: 30.w,
+          child: Image.asset("./assets/Icons/notes.png"),
         ),
       ),
     );

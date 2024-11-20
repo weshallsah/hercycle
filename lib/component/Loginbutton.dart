@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:hercycle/controller/auth.controller.dart';
 
 class Loginbutton extends StatelessWidget {
   Function clicked;
   String name;
-  Loginbutton({required this.clicked, required this.name, super.key});
+  Authcontroller authcontroller;
+  Loginbutton(
+      {required this.clicked,
+      required this.name,
+      required this.authcontroller,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +37,16 @@ class Loginbutton extends StatelessWidget {
             color: Color.fromARGB(255, 255, 216, 223),
             border: Border.all(),
           ),
-          child: Text(
-            name,
-            style: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w600,
-            ),
+          child: Obx(
+            () => authcontroller.isloading.value
+                ? CircularProgressIndicator()
+                : Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
           ),
         ),
       ),

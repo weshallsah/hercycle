@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:hercycle/component/postvideoplayer.dart';
+import 'package:hercycle/component/videoplayer.dart';
+import 'package:hercycle/controller/Vlogs.controller.dart';
 
 class Posts extends StatelessWidget {
-  const Posts({super.key});
+  int idx;
+  VlogsController controller;
+  Posts({required this.idx, required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +19,7 @@ class Posts extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                radius: 25.r,
+                radius: 20.r,
                 foregroundImage: AssetImage(
                   "./assets/png/profileavatar.png",
                 ),
@@ -21,11 +27,13 @@ class Posts extends StatelessWidget {
               SizedBox(
                 width: 15.w,
               ),
-              Text(
-                "Username",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
+              Obx(
+                () => Text(
+                  controller.posts[idx]["username"],
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
@@ -33,9 +41,28 @@ class Posts extends StatelessWidget {
           SizedBox(
             height: 15.h,
           ),
-          Container(
-            height: 340.h,
-            color: Colors.amber,
+          Obx(
+            () => controller.posts[idx]["isphoto"]
+                ? Container(
+                    height: 340.h,
+                    // color: Colors.amber,
+                    child: Image.network(
+                      controller.posts[idx]["url"],
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 350.h,
+                          child: Center(
+                            child: Icon(
+                              Icons.photo,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : YoutubePlayerScreen(
+                    // pathh: controller.posts[idx]["url"],
+                  ),
           ),
           SizedBox(
             height: 15.h,
@@ -47,7 +74,7 @@ class Posts extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: RichText(
               text: TextSpan(
-                text: 'Username ',
+                text: "${controller.posts[idx]["username"]} ",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20.sp,
@@ -55,7 +82,7 @@ class Posts extends StatelessWidget {
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: 'Diet that you can have in your periods.',
+                    text: controller.posts[idx]["caption"],
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.normal,

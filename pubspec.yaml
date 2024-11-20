@@ -49,6 +49,11 @@ dependencies:
   firebase_storage: ^12.3.6
   audioplayers: ^6.1.0
   video_player: ^2.9.2
+  firebase_messaging: ^15.1.5
+  chewie: ^1.8.5
+  appinio_video_player: ^1.2.2
+  app_settings: ^5.1.1
+  youtube_player_flutter: ^9.1.1
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +82,7 @@ flutter:
     - assets/Icons/
     - assets/png/
     - assets/audio/
+    - assets/video/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

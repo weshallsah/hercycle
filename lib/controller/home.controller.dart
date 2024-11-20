@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:hercycle/component/toast.dart';
+import 'package:hercycle/services/notification.services.dart';
 import 'package:intl/intl.dart';
 
 class Homecontroller extends GetxController {
@@ -18,6 +21,7 @@ class Homecontroller extends GetxController {
   RxString cycleinfo = "".obs;
   RxString cyclecnt = "".obs;
   TextEditingController note = TextEditingController();
+  NotificationServices notificationServices = NotificationServices();
   @override
   void onInit() async {
     // TODO: implement onInit
@@ -32,6 +36,12 @@ class Homecontroller extends GetxController {
       days.add(DateTime.now().day - i);
     }
     days.sort();
+    await getdates();
+    notificationServices.requestNotificationPermission();
+    notificationServices.firebaseinit();
+  }
+
+  Future<void> getdates() async {
     final userdata =
         await FirebaseFirestore.instance.collection("user").doc(uid).get();
     // print("user := ${userdata.data()}");
@@ -64,9 +74,20 @@ class Homecontroller extends GetxController {
       int cnt = cyclest.value - dateTime.value.day;
       cyclecnt.value = "${cnt} days ago";
     }
+    Map? list = prides.value;
+    if (list[dateTime.value.day]) {
+      notificationServices.shownotification(
+        RemoteMessage(
+          notification: RemoteNotification(
+            title: "hercycle",
+            body: "you are on your cycle day",
+          ),
+        ),
+      );
+    }
   }
 
-  void getname() async {
+  void getname(BuildContext context) async {
     final userdata =
         await FirebaseFirestore.instance.collection("user").doc(uid).get();
     name.value = userdata.data()?['name'];
@@ -79,22 +100,30 @@ class Homecontroller extends GetxController {
     return firstDayNextMonth.difference(firstDayThisMonth).inDays;
   }
 
-  void uploadnote() async {
-    if (note.text.isEmpty) {
-      return;
+  void uploadnote(BuildContext context) async {
+    bool ismy = false;
+    try {
+      if (note.text.isEmpty) {
+        return;
+      }
+      print(note.text);
+      FirebaseFirestore.instance
+          .collection("notes")
+          .doc(uid)
+          .collection("quotes")
+          .doc()
+          .set({
+        "notes": note.text,
+        "date": "${DateFormat('d MMM y').format(dateTime.value)}",
+        "time": "${DateFormat.jm().format(dateTime.value)}",
+        "createdat": Timestamp.now(),
+      });
+      note.clear();
+      showToast(context, "note is added");
+    } catch (e) {
+      print(e);
+      showToast(context, "something went wrong please try again");
+      note.clear();
     }
-    print(note.text);
-    FirebaseFirestore.instance
-        .collection("notes")
-        .doc(uid)
-        .collection("quotes")
-        .doc()
-        .set({
-      "notes": note.text,
-      "date": "${DateFormat('d MMM y').format(dateTime.value)}",
-      "time": "${DateFormat.jm().format(dateTime.value)}",
-      "createdat": Timestamp.now(),
-    });
-    note.clear();
   }
 }
