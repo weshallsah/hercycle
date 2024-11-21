@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hercycle/component/postvideoplayer.dart';
 import 'package:hercycle/component/videoplayer.dart';
 import 'package:hercycle/controller/workout.controller.dart';
 import 'package:video_player/video_player.dart';
@@ -27,8 +28,8 @@ class GymScreen extends StatelessWidget {
                 children: [
                   new Container(
                       margin: EdgeInsets.symmetric(vertical: 10.h),
-                      child: VideoPlay(
-                        pathh: controller.workout[index]['url'],
+                      child: YoutubePlayerScreen(
+                        url: controller.workout[index]['url'],
                       )
                       // : Container(),
                       ),

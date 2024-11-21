@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                 return Obx(() => controller.iscalendar.value
                     ? Obx(
                         () => controller.iscyclegets.value
-                            ? Fullcalendar(
+                            ?  Fullcalendar(
                                 homecontroller: controller,
                               )
                             : Fullcalendar(
@@ -199,22 +199,110 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Your period is likely to start on or around",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                      ),
-                    ),
                     Obx(
                       () => Text(
-                        homecontroller.cycleinfo.value,
+                        homecontroller.isedit.value
+                            ? "Please Enter your Middel Date of Periods"
+                            : "Your period is likely to start on or around",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Obx(
+                          () => !homecontroller.isedit.value
+                              ? Text(
+                                  homecontroller.cycleinfo.value,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 30.h,
+                                      // color: Colors.amber,
+                                      alignment: Alignment.bottomCenter,
+                                      child: Text(
+                                        DateFormat("MMMM").format(
+                                            homecontroller.dateTime.value),
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5.w,
+                                    ),
+                                    Container(
+                                      height: 35.h,
+                                      // color: Colors.amber,
+                                      width: 35.w,
+                                      padding: EdgeInsets.all(0),
+                                      margin: EdgeInsets.all(0),
+                                      child: TextField(
+                                        controller: homecontroller.date,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.all(5),
+                                        ),
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (homecontroller.isedit.value) {
+                              homecontroller.updatecycledate(context);
+                            }
+                            homecontroller.isedit.value =
+                                !homecontroller.isedit.value;
+                          },
+                          child: Obx(
+                            () => Icon(
+                              homecontroller.isedit.value
+                                  ? Icons.check_circle_outline
+                                  : Icons.edit,
+                              color: homecontroller.isedit.value
+                                  ? Colors.green
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Obx(
+                          () => homecontroller.isedit.value
+                              ? InkWell(
+                                  onTap: () {
+                                    homecontroller.date.text =
+                                        homecontroller.mid.toString();
+                                    homecontroller.isedit.value = false;
+                                  },
+                                  child: Icon(
+                                    Icons.cancel_outlined,
+                                    color: Colors.red,
+                                  ))
+                              : Container(),
+                        ),
+                      ],
                     ),
                     // July 29
                   ],

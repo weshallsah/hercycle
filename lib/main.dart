@@ -35,12 +35,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-  // final Splashcontroller splashcontroller = Get.put(Splashcontroller());
+  final Splashcontroller splashcontroller = Get.put(Splashcontroller());
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Hercycle',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -49,11 +49,11 @@ class MyApp extends StatelessWidget {
           trackHeight: 4,
         ),
       ),
-      home:  ScreenUtilInit(
+      home: const ScreenUtilInit(
         designSize: Size(393, 852),
         child: Scaffold(
           body: Center(
-            child: YoutubePlayerScreen(),
+            child: CircularProgressIndicator(),
           ),
         ),
       ),

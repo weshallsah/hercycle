@@ -1,10 +1,9 @@
-import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-// or import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class YoutubePlayerScreen extends StatefulWidget {
+  String url;
+  YoutubePlayerScreen({required this.url, super.key});
   @override
   _YoutubePlayerScreenState createState() => _YoutubePlayerScreenState();
 }
@@ -14,13 +13,11 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
   Duration? _duration;
 
   // Example YouTube URL - replace with your video URL
-  final String videoUrl =
-      "https://www.youtube.com/embed/1hhHhLP3_To?si=2CjrnngHta9LqbOV";
 
   @override
   void initState() {
     super.initState();
-    final videoId = YoutubePlayer.convertUrlToId(videoUrl);
+    final videoId = YoutubePlayer.convertUrlToId(widget.url);
     if (videoId != null) {
       _initYoutubePlayer(videoId);
     }
@@ -32,8 +29,8 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
       flags: const YoutubePlayerFlags(
         autoPlay: false,
         mute: false,
-        enableCaption: false,
         forceHD: false,
+        loop: true,
         controlsVisibleAtStart: true,
       ),
     );
@@ -48,32 +45,27 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
     });
   }
 
-  @override
+  // @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('YouTube Player')),
-      body: YoutubePlayer(
-        controller: _controller,
-        showVideoProgressIndicator: true,
-        progressIndicatorColor: Colors.red,
-        progressColors: ProgressBarColors(
-          playedColor: Colors.red,
-          handleColor: Colors.redAccent,
-        ),
-        onReady: () {
-          print('Player is ready.');
-          // You can also get duration here
-          setState(() {
-            _duration = _controller.metadata.duration;
-          });
-        },
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
+      progressIndicatorColor: Colors.red,
+      progressColors: ProgressBarColors(
+        playedColor: Colors.red,
+        handleColor: Colors.redAccent,
       ),
+      onReady: () {
+        setState(() {
+          _duration = _controller.metadata.duration;
+        });
+      },
     );
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
+  void dispose() async {
+    // _controller.dispose();
     super.dispose();
   }
 }

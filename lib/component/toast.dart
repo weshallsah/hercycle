@@ -5,7 +5,6 @@ void showToast(BuildContext context, String text) {
   scaffold.showSnackBar(
     SnackBar(
       content: Text(text),
-      // action: SnackBarAction(onPressed: scaffold.hideCurrentSnackBar),
     ),
   );
 }

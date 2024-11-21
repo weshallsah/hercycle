@@ -104,6 +104,15 @@ class Authcontroller extends GetxController {
       password.clear();
       isloading.value = false;
       Splashcontroller().onInit();
+    } on FirebaseAuthException catch (e) {
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+      showToast(
+        context,
+        e.message.toString(),
+      );
+      isloading.value = false;
+      return;
     } catch (e) {
       print("Error := ${e}");
       if (ismy) {
@@ -177,6 +186,7 @@ class Authcontroller extends GetxController {
               "avatar": url,
               "createdat": Timestamp.now(),
               "usertoke": apnsToken,
+              "lastnotification": -1,
             });
             email.clear();
             password.clear();
@@ -191,6 +201,15 @@ class Authcontroller extends GetxController {
       );
       isloading.value = false;
       // print(user);
+    } on FirebaseAuthException catch (e) {
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+      showToast(
+        context,
+        e.message.toString(),
+      );
+      isloading.value = false;
+      return;
     } catch (e) {
       print("Error ${e}");
       if (ismy) {

@@ -22,6 +22,10 @@ class Homecontroller extends GetxController {
   RxString cyclecnt = "".obs;
   TextEditingController note = TextEditingController();
   NotificationServices notificationServices = NotificationServices();
+  TextEditingController date = TextEditingController(text: "");
+  RxBool isedit = false.obs;
+  int mid = 0;
+
   @override
   void onInit() async {
     // TODO: implement onInit
@@ -42,13 +46,16 @@ class Homecontroller extends GetxController {
   }
 
   Future<void> getdates() async {
+    prides.value = {};
+    iscyclegets.value = false;
     final userdata =
         await FirebaseFirestore.instance.collection("user").doc(uid).get();
-    // print("user := ${userdata.data()}");
     int curmonth = daysInMonth(dateTime.value, dateTime.value.month) + 1;
     int prevmonth = daysInMonth(dateTime.value, dateTime.value.month - 1);
-    int mid = userdata.data()?['cycledate'];
-    // int mid = 1;
+    int st = 0;
+    mid = userdata.data()?['cycledate'];
+    int lastnotification = userdata.data()?['lastnotification'];
+    date.text = mid.toString();
     prides.value[mid] = true;
     for (int i = 1; i <= 3; i++) {
       prides.value[(mid + i) % curmonth] = true;
@@ -61,11 +68,17 @@ class Homecontroller extends GetxController {
         cyclest.value = mid - i;
       }
     }
-    iscyclegets.value = true;
-    cycleinfo.value = "${DateFormat("MMMM").format(dateTime.value)} ${cyclest}";
+    for (int i = 1; i <= 3; i++) {
+      if (cyclest.value - i <= 0) {
+        st = prevmonth + (cyclest.value - i);
+      } else {
+        st = cyclest.value - i;
+      }
+    }
     if (dateTime.value.day >= cyclest.value &&
         dateTime.value.day <= cycleen.value) {
-      cyclecnt.value = "You are in your cycle phase.";
+      cyclecnt.value =
+          "${dateTime.value.day - cyclest.value + 1}st day of your cycle phase.";
     } else if (dateTime.value.day > cycleen.value) {
       int cnt = curmonth - dateTime.value.day - 1;
       cnt += cyclest.value - 1;
@@ -74,16 +87,61 @@ class Homecontroller extends GetxController {
       int cnt = cyclest.value - dateTime.value.day;
       cyclecnt.value = "${cnt} days ago";
     }
-    Map? list = prides.value;
-    if (list[dateTime.value.day]) {
+    iscyclegets.value = true;
+    cycleinfo.value = "${DateFormat("MMMM").format(dateTime.value)} ${cyclest}";
+    if (lastnotification != dateTime.value.day &&
+        dateTime.value.day >= st &&
+        dateTime.value.day <= cycleen.value) {
+      String str = "";
+      if (dateTime.value.day >= st && dateTime.value.day <= cyclest.value) {
+        str =
+            "be prepared for your periods only ${cyclest.value - dateTime.value.day} days left";
+      }
+      if (dateTime.value.day >= cyclest.value &&
+          dateTime.value.day <= cycleen.value) {
+        str =
+            "${dateTime.value.day - cyclest.value + 1}st day of your cycle phase.";
+      }
       notificationServices.shownotification(
         RemoteMessage(
           notification: RemoteNotification(
             title: "hercycle",
-            body: "you are on your cycle day",
+            body: str,
           ),
         ),
       );
+      await FirebaseFirestore.instance.collection("user").doc(uid).update({
+        "lastnotification": dateTime.value.day,
+      });
+    }
+  }
+
+  void updatecycledate(BuildContext context) async {
+    bool ismy = false;
+    try {
+      if (!date.text.isNum) {
+        ismy = true;
+        throw "Date is not a vaild type";
+      }
+      if (int.parse(date.text) >= 32 || int.parse(date.text) <= 0) {
+        ismy = true;
+        throw "Date is not valid";
+      }
+      await FirebaseFirestore.instance.collection("user").doc(uid).update({
+        "cycledate": int.parse(date.text),
+      });
+      getdates();
+    } catch (e) {
+      date.text = mid.toString();
+      print("Error ${e}");
+      if (ismy) {
+        showToast(context, e.toString());
+      } else {
+        showToast(
+          context,
+          "server error please try again",
+        );
+      }
     }
   }
 

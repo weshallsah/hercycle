@@ -61,7 +61,7 @@ class Posts extends StatelessWidget {
                     ),
                   )
                 : YoutubePlayerScreen(
-                    // pathh: controller.posts[idx]["url"],
+                    url: controller.posts[idx]["url"],
                   ),
           ),
           SizedBox(

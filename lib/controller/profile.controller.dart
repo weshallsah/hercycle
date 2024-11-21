@@ -11,9 +11,9 @@ import 'package:intl/intl.dart';
 
 class Profilecontroller extends GetxController {
   RxBool isedit = false.obs;
-  TextEditingController username = TextEditingController(text: "Siddhi Sah");
-  RxString email = "vishalk74064@gmail.com".obs;
-  RxString name = "siddhi sah".obs;
+  TextEditingController username = TextEditingController(text: "");
+  RxString email = "".obs;
+  RxString name = "".obs;
   RxString Imageurl = "".obs;
   RxString avatar = "".obs;
   RxString image = "".obs;
@@ -97,7 +97,7 @@ class Profilecontroller extends GetxController {
         return;
       }
       name.value = username.text;
-      FirebaseFirestore.instance.collection("user").doc(uid).update({
+      await FirebaseFirestore.instance.collection("user").doc(uid).update({
         "name": username.text,
       });
     } catch (e) {
